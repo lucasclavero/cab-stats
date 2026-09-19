@@ -105,6 +105,24 @@ select {
   border-color: #8ac6ff;
 }
 
+.cta:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.drop-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.drop-actions .cta,
+.drop-actions .ghost {
+  margin-top: 0;
+}
+
 .file-list {
   margin: 10px 0 0;
   padding: 0;

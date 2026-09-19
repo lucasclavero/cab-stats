@@ -3,6 +3,7 @@ import { Donut, HBar, LineChart } from "./charts";
 import { buildReport, inferFocusTeam, topPlayers } from "./lib/aggregate";
 import { fmtPct, locLabel, shot, signed } from "./lib/format";
 import { parseFile } from "./lib/parse";
+import { exportReportPdf } from "./lib/exportPdf";
 import type { ParsedGame, PlayerSeason, RankDef, SeasonReport } from "./types";
 
 const INFO = "#6cb6ff";
@@ -39,6 +40,7 @@ export default function App() {
   const [rankId, setRankId] = useState<string>("pts");
   const [playerKey, setPlayerKey] = useState("");
   const [drag, setDrag] = useState(false);
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   async function ingest(list: File[]) {
     if (!list.length) return;
@@ -98,6 +100,18 @@ export default function App() {
     if (!parsed.length) return null;
     return buildReport(parsed, focus);
   }, [parsed, focus]);
+
+  async function downloadPdf() {
+    if (!report) return;
+    setPdfBusy(true);
+    try {
+      await exportReportPdf(report);
+    } catch (err) {
+      setErrors((prev) => [...prev, err instanceof Error ? err.message : String(err)]);
+    } finally {
+      setPdfBusy(false);
+    }
+  }
 
   const rank = report?.ranks.find((r) => r.id === rankId) ?? report?.ranks[0];
   const leaders = report && rank ? topPlayers(report.players, rank) : [];
@@ -175,9 +189,21 @@ export default function App() {
               Probar con 4 partidos de Arenal
             </button>
           ) : (
-            <button type="button" className="ghost" onClick={clearAll}>
-              Quitar todo
-            </button>
+            <>
+              {report ? (
+                <button
+                  type="button"
+                  className="cta"
+                  disabled={pdfBusy}
+                  onClick={() => void downloadPdf()}
+                >
+                  {pdfBusy ? "Generando PDF…" : "Descargar PDF"}
+                </button>
+              ) : null}
+              <button type="button" className="ghost" onClick={clearAll}>
+                Quitar todo
+              </button>
+            </>
           )}
         </div>
       </section>

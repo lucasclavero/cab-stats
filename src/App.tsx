@@ -171,7 +171,7 @@ export default function App() {
         ) : null}
         <div className="drop-actions">
           {!files.length ? (
-            <button type="button" className="ghost" onClick={() => void loadSamples()}>
+            <button type="button" className="cta" onClick={() => void loadSamples()}>
               Probar con 4 partidos de Arenal
             </button>
           ) : (

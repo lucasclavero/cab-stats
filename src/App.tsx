@@ -73,6 +73,7 @@ export default function App() {
       "estadisticaPartido_202619929.xlsx",
       "estadisticaPartido_202619103.xlsx",
       "estadisticaPartido_2026191031.xlsx",
+      "estadisticaPartido_202623832.xlsx",
     ];
     const loaded: File[] = [];
     for (const name of names) {
@@ -171,7 +172,7 @@ export default function App() {
         <div className="drop-actions">
           {!files.length ? (
             <button type="button" className="ghost" onClick={() => void loadSamples()}>
-              Probar con 3 partidos de Arenal
+              Probar con 4 partidos de Arenal
             </button>
           ) : (
             <button type="button" className="ghost" onClick={clearAll}>
